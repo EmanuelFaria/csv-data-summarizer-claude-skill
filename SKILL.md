@@ -1,6 +1,7 @@
 ---
 name: csv-data-summarizer
-description: Analyzes CSV files, generates summary stats, and plots quick visualizations using Python and pandas.
+description: >
+  Analyzes CSV files, generates summary stats, and plots quick visualizations using Python and pandas. Use when user says "summarize csv", "analyze dataset", "data profile", "csv statistics", "visualize data", or uploads a CSV for analysis. ALSO triggers when Claude thinks "I should analyze this data first", "Need to understand the data structure", "Generating data summary", or "Profiling this dataset". Hook detection: Read tool on .csv files when analysis requested, user uploads CSV attachment. Automatically generates comprehensive summaries without asking what to do.
 metadata:
   version: 2.1.0
   dependencies: python>=3.8, pandas>=2.0.0, matplotlib>=3.7.0, seaborn>=0.12.0
@@ -8,15 +9,46 @@ metadata:
 
 # CSV Data Summarizer
 
-This Skill analyzes CSV files and provides comprehensive summaries with statistical insights and visualizations.
+*Produces: Comprehensive CSV analysis with statistics, visualizations, and actionable insights automatically*
+*Companion to: csv-protocol, csv-demo-generator, csv-diff-html*
 
-## When to Use This Skill
+---
 
-Claude should use this Skill whenever the user:
-- Uploads or references a CSV file
-- Asks to summarize, analyze, or visualize tabular data
-- Requests insights from CSV data
-- Wants to understand data structure and quality
+## When to Use
+
+- **User uploads or references** a CSV file
+- **Data exploration** requests (summarize, analyze, visualize)
+- **Data quality assessment** needs (missing values, distributions)
+- **Quick insights** from tabular data
+- **Before deeper analysis** to understand data structure
+- **Sales/operational/survey data** requiring statistical summaries
+
+## When NOT to Use
+
+| Situation | Use Instead |
+|-----------|-------------|
+| CSV structural validation (61-column, ROW_ID format) | csv-protocol skill |
+| Generating interactive HTML demos from CSV | csv-demo-generator skill |
+| Comparing two CSV versions for changes | csv-diff-html skill |
+| Behavioral content analysis (identity arc, psychology) | AI-council with CSV expertise |
+| Creating/editing CSV content | Direct Edit tool with csv-protocol |
+| Security validation (XSS, template literals) | csv-protocol skill |
+
+---
+
+## Prerequisites
+
+| Resource | Location | Purpose |
+|----------|----------|---------|
+| **Python 3.8+** | `/opt/homebrew/bin/python3` | Analysis execution |
+| **pandas 2.0+** | Python package | Data manipulation |
+| **matplotlib 3.7+** | Python package | Visualization generation |
+| **seaborn 0.12+** | Python package | Statistical plotting |
+| **analyze.py** | `./analyze.py` | Core analysis script |
+| **requirements.txt** | `./requirements.txt` | Dependency specification |
+| **Sample data** | `./resources/sample.csv` | Testing reference |
+
+---
 
 ## How It Works
 
@@ -133,12 +165,39 @@ The Skill provides a Python function `summarize_csv(file_path)` that:
 - Peak activity in Q4
 *(Attached: trend plot)*
 
-## Files
+---
 
-- `analyze.py` - Core analysis logic
-- `requirements.txt` - Python dependencies
-- `resources/sample.csv` - Example dataset for testing
-- `resources/README.md` - Additional documentation
+## Anti-Patterns
+
+| Don't | Do Instead |
+|-------|------------|
+| Ask "What would you like to do with this data?" | IMMEDIATELY run comprehensive analysis |
+| List options for user to choose from | Generate ALL relevant visualizations automatically |
+| Wait for user direction before analyzing | Act decisively - analyze first, show results |
+| Provide partial analysis requiring follow-up | Complete analysis in one response |
+| Create visualizations that don't match data type | Adapt analysis to actual data structure |
+| Generate time-series plots without date columns | Check for date columns first |
+| Force generic analysis on specific domains | Recognize sales/healthcare/survey patterns |
+| Say "I can analyze this if you'd like" | Just do it - "Here's the complete analysis:" |
+| Describe what you COULD do | DO IT and show what you DID |
+| Ask permission to be thorough | Be thorough by default |
+| Generate visualizations manually | Use analyze.py script |
+| Skip dependency check | Verify pandas/matplotlib installed |
+
+---
+
+## Reference Files
+
+| File | Purpose | Location |
+|------|---------|----------|
+| **SKILL.md** | This file - skill definition | `~/.claude/skills/csv-data-summarizer/SKILL.md` |
+| **analyze.py** | Core analysis script | `~/.claude/skills/csv-data-summarizer/analyze.py` |
+| **requirements.txt** | Python dependencies | `~/.claude/skills/csv-data-summarizer/requirements.txt` |
+| **Sample CSV** | Test dataset | `~/.claude/skills/csv-data-summarizer/resources/sample.csv` |
+| **Additional docs** | Extended documentation | `~/.claude/skills/csv-data-summarizer/resources/README.md` |
+| **Examples** | Usage examples | `~/.claude/skills/csv-data-summarizer/examples/` |
+
+---
 
 ## Notes
 
@@ -146,4 +205,66 @@ The Skill provides a Python function `summarize_csv(file_path)` that:
 - Handles missing data gracefully
 - Generates visualizations only when date columns are present
 - All numeric columns are included in statistical summary
+- Adapts analysis strategy based on data structure inspection
+
+---
+
+## CLI Tools
+
+### analyze.py — Core Analysis Script
+
+Run comprehensive CSV analysis with statistics and visualizations.
+
+```bash
+# Basic analysis
+python3 ~/.claude/skills-lazy-loaded/csv-data-summarizer/analyze.py /path/to/data.csv
+
+# Analysis with output directory for visualizations
+python3 ~/.claude/skills-lazy-loaded/csv-data-summarizer/analyze.py /path/to/data.csv --output /tmp/analysis
+
+# Quick summary (no visualizations)
+python3 ~/.claude/skills-lazy-loaded/csv-data-summarizer/analyze.py /path/to/data.csv --quick
+```
+
+---
+
+## Critical Rules
+
+1. **Immediately run analysis** — NEVER ask user what they want to do with data
+2. **Generate ALL relevant visualizations** — Automatic based on data structure
+3. **Adapt to data type** — Recognize sales/healthcare/survey patterns automatically
+4. **Complete in one response** — No partial analysis requiring follow-up
+5. **Check date columns first** — Only generate time-series if date columns exist
+6. **Verify dependencies** — Ensure pandas/matplotlib installed before running
+7. **Act decisively** — Be thorough by default, no permission needed
+
+---
+
+## Common Mistakes
+
+1. **Asking what user wants to do** — FORBIDDEN; immediately run comprehensive analysis
+2. **Listing options for user** — FORBIDDEN; generate ALL relevant visualizations
+3. **Waiting for user direction** — Act decisively, analyze first
+4. **Partial analysis** — Always complete in one response
+5. **Generic time-series without date columns** — Check for date columns first
+6. **Forcing generic analysis** — Adapt to sales/healthcare/survey patterns
+7. **Saying "I can analyze if you'd like"** — Just do it; show what you DID
+8. **Skipping dependency check** — Verify pandas/matplotlib before running
+
+---
+
+## Files in This Skill
+
+| File | Purpose |
+|------|---------|
+| `SKILL.md` | This documentation |
+| `analyze.py` | Core analysis script |
+| `requirements.txt` | Python dependencies |
+| `resources/sample.csv` | Test dataset |
+| `resources/README.md` | Extended documentation |
+| `examples/` | Usage examples |
+
+---
+
+*Last Updated: 2026-01-15*
 
